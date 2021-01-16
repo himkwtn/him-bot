@@ -4,6 +4,7 @@ import { Cron } from '@nestjs/schedule';
 import { DateTime } from 'luxon';
 import { map } from 'rxjs/operators';
 import { LineClient } from 'src/line/line.client';
+import { inspect } from 'util';
 interface WeatherPayload {
   status: string;
   data: {
@@ -62,11 +63,11 @@ export class PollutionService {
     timeZone: 'Asia/Bangkok',
   })
   async sendDailyMessage() {
-    try {
-      this.getPollutionData().subscribe(data => {
+    this.getPollutionData().subscribe(async data => {
+      try {
         const message = `${data.pm2} US AQI
 ${data.time} `;
-        this.lineClient.pushTextMessage(
+        await this.lineClient.pushTextMessage(
           this.config.get('HOME_LINE_GROUP'),
           message,
           {
@@ -74,9 +75,9 @@ ${data.time} `;
             iconUrl: 'https://www.iqair.com/assets/img/app_icon_basic_96.png',
           },
         );
-      });
-    } catch (e) {
-      console.log(e);
-    }
+      } catch (e) {
+        console.log(inspect(e, { depth: null }));
+      }
+    });
   }
 }

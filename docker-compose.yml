@@ -1,0 +1,12 @@
+version: '3.2'
+
+services:
+  app:
+    build: .
+    ports:
+      - 3000:3000
+    environment:
+      AIR_VISUAL_API_KEY:
+      LINE_TOKEN:
+      LINE_SECRET:
+      HOME_LINE_GROUP:
