@@ -1,10 +1,15 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { PollutionModule } from './pollution/pollution.module';
+import { LineModule } from './line/line.module';
+import { ConfigModule } from '@nestjs/config';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot(),
+    ScheduleModule.forRoot(),
+    PollutionModule,
+    LineModule,
+  ],
 })
 export class AppModule {}
