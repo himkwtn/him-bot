@@ -58,7 +58,7 @@ export class PollutionService {
     );
   }
 
-  @Cron('0 07 * * *', {
+  @Cron('1 7,8,9 * * *', {
     name: 'daily-message',
     timeZone: 'Asia/Bangkok',
   })
