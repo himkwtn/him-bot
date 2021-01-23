@@ -3,6 +3,7 @@ import { PollutionModule } from './pollution/pollution.module';
 import { LineModule } from './line/line.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
+import { AppService } from './app.service';
 import { DiscordGatewayModule } from './gateway/discord/discord-gateway.module';
 import { LineGatewayModule } from './gateway/line/line-gateway.module';
 
@@ -33,5 +34,6 @@ import { LineGatewayModule } from './gateway/line/line-gateway.module';
       inject: [ConfigService],
     }),
   ],
+  providers: [AppService],
 })
 export class AppModule {}
