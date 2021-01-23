@@ -3,16 +3,20 @@ import {
   Body,
   Controller,
   Headers,
+  Inject,
   Post,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import * as crypto from 'crypto';
-import { inspect } from 'util';
+import { EventEmitter2 } from 'eventemitter2';
+import { LINE_SECRET } from './constants';
 
-@Controller('line')
-export class LineController {
-  constructor(private readonly configService: ConfigService) {}
+@Controller()
+export class LineGatewayController {
+  constructor(
+    @Inject(LINE_SECRET) private readonly secret: string,
+    private readonly eventEmitter: EventEmitter2,
+  ) {}
 
   @Post()
   async webhook(
@@ -21,7 +25,10 @@ export class LineController {
   ) {
     if (!this.verifySignature(message, lineSignature))
       throw new UnauthorizedException();
-    console.log(inspect(message, true, null));
+    this.eventEmitter.emit('webhook', message);
+    for (const event of message.events) {
+      this.eventEmitter.emit(event.type, event);
+    }
     return;
   }
   private verifySignature(message: WebhookRequestBody, lineSignature: string) {
@@ -29,7 +36,7 @@ export class LineController {
   }
   private getBodySignature(message: WebhookRequestBody) {
     return crypto
-      .createHmac('SHA256', this.configService.get('LINE_SECRET'))
+      .createHmac('SHA256', this.secret)
       .update(JSON.stringify(message))
       .digest('base64');
   }

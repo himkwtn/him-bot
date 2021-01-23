@@ -4,6 +4,7 @@ import { LineModule } from './line/line.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { DiscordGatewayModule } from './gateway/discord/discord-gateway.module';
+import { LineGatewayModule } from './gateway/line/line-gateway.module';
 
 @Module({
   imports: [
@@ -11,6 +12,17 @@ import { DiscordGatewayModule } from './gateway/discord/discord-gateway.module';
     ScheduleModule.forRoot(),
     PollutionModule,
     LineModule,
+    LineGatewayModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => {
+        return {
+          channelAccessToken: configService.get<string>('LINE_ACCESS_TOKEN'),
+          channelSecret: configService.get<string>('LINE_SECRET'),
+        };
+      },
+      path: 'line',
+      inject: [ConfigService],
+    }),
     DiscordGatewayModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {

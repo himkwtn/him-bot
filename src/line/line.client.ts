@@ -1,16 +1,9 @@
 import { Client } from '@line/bot-sdk';
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class LineClient {
-  private readonly client: Client;
-  constructor(private readonly config: ConfigService) {
-    this.client = new Client({
-      channelAccessToken: config.get('LINE_TOKEN'),
-      channelSecret: config.get('LINE_SECRET'),
-    });
-  }
+  constructor(private readonly client: Client) {}
 
   pushTextMessage(
     to: string,
