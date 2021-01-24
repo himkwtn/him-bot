@@ -6,11 +6,11 @@ import {
   DiscordOnEvent,
 } from './gateway/discord/discord.decorator';
 import { LineOnEvent } from './gateway/line/line.decorator';
-import { LineClient } from './line/line.client';
+import { LineService } from './line/line.service';
 
 @Injectable()
 export class AppService {
-  constructor(private readonly client: LineClient) {}
+  constructor(private readonly client: LineService) {}
   @DiscordOnceEvent('ready')
   ready() {
     console.log('ready!');

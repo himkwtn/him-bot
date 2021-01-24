@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DiscordGatewayModule } from './discord/discord-gateway.module';
 import { LineGatewayModule } from './line/line-gateway.module';
+import { GatewayService } from './gateway.service';
+import { DiscordService } from './discord.service';
 
 @Module({
   imports: [
@@ -26,5 +28,6 @@ import { LineGatewayModule } from './line/line-gateway.module';
       inject: [ConfigService],
     }),
   ],
+  providers: [GatewayService, DiscordService],
 })
 export class GatewayModule {}

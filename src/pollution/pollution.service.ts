@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { Cron } from '@nestjs/schedule';
 import { DateTime } from 'luxon';
 import { map } from 'rxjs/operators';
-import { LineService } from 'src/line/line.service';
+import { LineService } from '../line/line.service';
 import { inspect } from 'util';
 interface WeatherPayload {
   status: string;

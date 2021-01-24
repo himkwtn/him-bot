@@ -1,6 +1,6 @@
 import { HttpModule, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { LineModule } from 'src/line/line.module';
+import { LineModule } from '../line/line.module';
 import { PollutionService } from './pollution.service';
 import { PollutionController } from './pollution.controller';
 
