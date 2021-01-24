@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { Message } from 'discord.js';
+import { Message, TextChannel } from 'discord.js';
 import { EventEmitter2 } from 'eventemitter2';
 import {
   IncomingTextMessageEvent,
@@ -28,7 +28,9 @@ export class GatewayService {
 
   @DiscordOnEvent('message')
   discord(message: Message) {
-    console.log(message.channel.id);
+    if (message.author.bot) {
+      return;
+    }
     this.eventEmitter.emit(
       IncomingTextMessageEvent.name,
       new IncomingTextMessageEvent(
