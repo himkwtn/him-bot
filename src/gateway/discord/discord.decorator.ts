@@ -1,4 +1,5 @@
 import { SetMetadata } from '@nestjs/common';
+import { ClientEvents } from 'discord.js';
 import {
   DISCORD_ONCE_EVENT_LISTENER_METADATA,
   DISCORD_ON_EVENT_LISTENER_METADATA,
@@ -11,7 +12,7 @@ export interface DiscordOnEventMetadata {
   /**
    * Event (name) to subscribe to.
    */
-  event: string;
+  event: keyof ClientEvents;
 }
 
 export type DiscordOnceEventMetadata = DiscordOnEventMetadata;
@@ -21,12 +22,12 @@ export type DiscordOnceEventMetadata = DiscordOnEventMetadata;
  *
  * @param name event to subscribe to
  */
-export const DiscordOnEvent = (event: string): MethodDecorator =>
+export const DiscordOnEvent = (event: keyof ClientEvents): MethodDecorator =>
   SetMetadata(DISCORD_ON_EVENT_LISTENER_METADATA, {
     event,
   } as DiscordOnEventMetadata);
 
-export const DiscordOnceEvent = (event: string): MethodDecorator =>
+export const DiscordOnceEvent = (event: keyof ClientEvents): MethodDecorator =>
   SetMetadata(DISCORD_ONCE_EVENT_LISTENER_METADATA, {
     event,
   } as DiscordOnceEventMetadata);

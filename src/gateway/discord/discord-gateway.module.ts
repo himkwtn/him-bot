@@ -1,10 +1,10 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { DiscoveryModule } from '@nestjs/core';
-import { Client } from 'discord.js';
+import { DISCORD_TOKEN } from './constants';
 import { DiscordEventSubscribersLoader } from './discord-event-subscribers.loader';
 import { DiscordEventsMetadataAccessor } from './discord-events-metadata.accessor';
+import { DiscordClient } from './discord.client';
 import { AsyncDiscordModuleOptions, DiscordModuleOptions } from './interfaces';
-import { DISCORD_TOKEN } from './constants';
 
 @Module({})
 export class DiscordGatewayModule {
@@ -17,15 +17,15 @@ export class DiscordGatewayModule {
         DiscordEventSubscribersLoader,
         DiscordEventsMetadataAccessor,
         {
-          provide: Client,
-          useValue: new Client(options),
+          provide: DiscordClient,
+          useValue: new DiscordClient(options),
         },
         {
           provide: DISCORD_TOKEN,
           useValue: options.token,
         },
       ],
-      exports: [Client],
+      exports: [DiscordClient],
     };
   }
   static forRootAsync(options: AsyncDiscordModuleOptions): DynamicModule {
@@ -37,10 +37,10 @@ export class DiscordGatewayModule {
         DiscordEventSubscribersLoader,
         DiscordEventsMetadataAccessor,
         {
-          provide: Client,
+          provide: DiscordClient,
           useFactory: async (...args) => {
             const resolvedOptions = await options.useFactory(...args);
-            return new Client(resolvedOptions);
+            return new DiscordClient(resolvedOptions);
           },
           inject: options.inject,
         },
@@ -53,7 +53,7 @@ export class DiscordGatewayModule {
           inject: options.inject,
         },
       ],
-      exports: [Client],
+      exports: [DiscordClient],
     };
   }
 }

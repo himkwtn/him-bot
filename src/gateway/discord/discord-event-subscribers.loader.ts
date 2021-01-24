@@ -6,16 +6,16 @@ import {
 } from '@nestjs/common';
 import { DiscoveryService, MetadataScanner } from '@nestjs/core';
 import { InstanceWrapper } from '@nestjs/core/injector/instance-wrapper';
-import { Client } from 'discord.js';
 import { DISCORD_TOKEN } from './constants';
 import { DiscordEventsMetadataAccessor } from './discord-events-metadata.accessor';
+import { DiscordClient } from './discord.client';
 
 @Injectable()
 export class DiscordEventSubscribersLoader
   implements OnApplicationBootstrap, OnApplicationShutdown {
   constructor(
     private readonly discoveryService: DiscoveryService,
-    private readonly client: Client,
+    private readonly client: DiscordClient,
     private readonly metadataAccessor: DiscordEventsMetadataAccessor,
     private readonly metadataScanner: MetadataScanner,
     @Inject(DISCORD_TOKEN) private readonly token: string,

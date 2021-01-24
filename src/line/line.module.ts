@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { LineClient } from './line.client';
+import { LineService } from './line.service';
 
 @Module({
-  providers: [LineClient],
-  exports: [LineClient],
+  providers: [LineService],
+  exports: [LineService],
 })
 export class LineModule {}

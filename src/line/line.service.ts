@@ -1,9 +1,9 @@
-import { Client } from '@line/bot-sdk';
+import { LineClient } from '../gateway/line/line.client';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class LineClient {
-  constructor(private readonly client: Client) {}
+export class LineService {
+  constructor(private readonly client: LineClient) {}
 
   pushTextMessage(
     to: string,

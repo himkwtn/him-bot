@@ -1,13 +1,17 @@
-import { Client } from '@line/bot-sdk';
 import { DynamicModule, Module } from '@nestjs/common';
 import { DiscoveryModule } from '@nestjs/core';
 import { EventEmitter2 } from 'eventemitter2';
-import { LINE_ACCESS_TOKEN, LINE_SECRET } from './constants';
+import { RouterModule } from 'nest-router';
+import {
+  INTERNAL_EVENT_EMITTER,
+  LINE_ACCESS_TOKEN,
+  LINE_SECRET,
+} from './constants';
 import { AsyncLineModuleOptions, LineModuleOptions } from './interfaces';
 import { LineEventSubscribersLoader } from './line-event-subscribers.loader';
 import { LineEventsMetadataAccessor } from './line-events-metadata.accessor';
+import { LineClient } from './line.client';
 import { LineGatewayController } from './line.controller';
-import { RouterModule } from 'nest-router';
 
 @Module({})
 export class LineGatewayModule {
@@ -25,8 +29,8 @@ export class LineGatewayModule {
         LineEventsMetadataAccessor,
         LineEventSubscribersLoader,
         {
-          provide: Client,
-          useValue: new Client(options),
+          provide: LineClient,
+          useValue: new LineClient(options),
         },
         {
           provide: LINE_ACCESS_TOKEN,
@@ -37,12 +41,12 @@ export class LineGatewayModule {
           useValue: options.channelSecret,
         },
         {
-          provide: EventEmitter2,
+          provide: INTERNAL_EVENT_EMITTER,
           useValue: new EventEmitter2(),
         },
       ],
       controllers: [LineGatewayController],
-      exports: [Client],
+      exports: [LineClient],
     };
   }
   static forRootAsync(options: AsyncLineModuleOptions): DynamicModule {
@@ -60,10 +64,10 @@ export class LineGatewayModule {
         LineEventsMetadataAccessor,
         LineEventSubscribersLoader,
         {
-          provide: Client,
+          provide: LineClient,
           useFactory: async (...args) => {
             const resolvedOptions = await options.useFactory(...args);
-            return new Client(resolvedOptions);
+            return new LineClient(resolvedOptions);
           },
           inject: options.inject,
         },
@@ -84,12 +88,12 @@ export class LineGatewayModule {
           inject: options.inject,
         },
         {
-          provide: EventEmitter2,
+          provide: INTERNAL_EVENT_EMITTER,
           useValue: new EventEmitter2(),
         },
       ],
       controllers: [LineGatewayController],
-      exports: [Client],
+      exports: [LineClient],
     };
   }
 }

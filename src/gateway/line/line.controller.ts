@@ -9,12 +9,13 @@ import {
 } from '@nestjs/common';
 import * as crypto from 'crypto';
 import { EventEmitter2 } from 'eventemitter2';
-import { LINE_SECRET } from './constants';
+import { INTERNAL_EVENT_EMITTER, LINE_SECRET } from './constants';
 
 @Controller()
 export class LineGatewayController {
   constructor(
     @Inject(LINE_SECRET) private readonly secret: string,
+    @Inject(INTERNAL_EVENT_EMITTER)
     private readonly eventEmitter: EventEmitter2,
   ) {}
 

@@ -1,4 +1,3 @@
-import { Client } from '@line/bot-sdk';
 import {
   Inject,
   Injectable,
@@ -8,7 +7,7 @@ import {
 import { DiscoveryService, MetadataScanner } from '@nestjs/core';
 import { InstanceWrapper } from '@nestjs/core/injector/instance-wrapper';
 import { EventEmitter2 } from 'eventemitter2';
-import { LINE_SECRET, LINE_ACCESS_TOKEN } from './constants';
+import { INTERNAL_EVENT_EMITTER } from './constants';
 import { LineEventsMetadataAccessor } from './line-events-metadata.accessor';
 
 @Injectable()
@@ -16,6 +15,7 @@ export class LineEventSubscribersLoader
   implements OnApplicationBootstrap, OnApplicationShutdown {
   constructor(
     private readonly discoveryService: DiscoveryService,
+    @Inject(INTERNAL_EVENT_EMITTER)
     private readonly eventEmitter: EventEmitter2,
     private readonly metadataAccessor: LineEventsMetadataAccessor,
     private readonly metadataScanner: MetadataScanner,

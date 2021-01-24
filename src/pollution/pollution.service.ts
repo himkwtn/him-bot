@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { Cron } from '@nestjs/schedule';
 import { DateTime } from 'luxon';
 import { map } from 'rxjs/operators';
-import { LineClient } from 'src/line/line.client';
+import { LineService } from 'src/line/line.service';
 import { inspect } from 'util';
 interface WeatherPayload {
   status: string;
@@ -40,7 +40,7 @@ export class PollutionService {
   constructor(
     private readonly config: ConfigService,
     private readonly http: HttpService,
-    private readonly lineClient: LineClient,
+    private readonly lineService: LineService,
   ) {}
 
   getPollutionData() {
@@ -67,7 +67,7 @@ export class PollutionService {
       try {
         const message = `${data.pm2} US AQI
 ${data.time} `;
-        await this.lineClient.pushTextMessage(
+        await this.lineService.pushTextMessage(
           this.config.get('HOME_LINE_GROUP'),
           message,
           {
